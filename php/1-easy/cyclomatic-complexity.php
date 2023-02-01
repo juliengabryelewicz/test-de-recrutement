@@ -1,59 +1,24 @@
 <?php
 
-function convertSize($bytes, $precision = 2) {
-  $kilobytes = $bytes / 1024;
+/**
+ * conversion des bytes avec l'unité de mesure appropriée
+ *
+ * @param  int|float $bytes
+ * @param  int $precision
+ * @return string
+ */
+function convertSize(int|float $bytes, int $precision = 2) : string
+{
+  // les unités de mesure sont mises dans un tableau
+  $unitMeasurements = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB', 'HB');
 
-  if ($kilobytes < 1024) {
-    return round($bytes, $precision) . ' KB';
+  // On effectue une boucle de manière à s'assurer que l'on trouve la bonne unité à envoyer
+  foreach ($unitMeasurements as $index => $unitMeasurement) {
+    // Au cas où un nombre trop grand serait envoyé (plus de 1024 HB), nous forçons à arrêter la boucle
+    if ($bytes < 1024 || $index === count($unitMeasurements) - 1) {
+      return round($bytes, $precision) . ' ' . $unitMeasurement;
+    } else {
+      $bytes = $bytes / 1024;
+    }
   }
-
-  $megabytes = $kilobytes / 1024;
-
-  if ($megabytes < 1024) {
-    return round($megabytes, $precision) . ' MB';
-  }
-
-  $gigabytes = $megabytes / 1024;
-
-  if ($gigabytes < 1024) {
-    return round($gigabytes, $precision) . ' GB';
-  }
-
-  $terabytes = $gigabytes / 1024;
-
-  if ($terabytes < 1024) {
-    return round($terabytes, $precision) . ' TB';
-  }
-
-  $petabytes = $terabytes / 1024;
-
-  if ($petabytes < 1024) {
-    return round($petabytes, $precision) . ' TB';
-  }
-
-  $exabytes = $petabytes / 1024;
-
-  if ($exabytes < 1024) {
-    return round($exabytes, $precision) . ' EB';
-  }
-
-  $zettabytes = $exabytes / 1024;
-
-  if ($zettabytes < 1024) {
-    return round($zettabytes, $precision) . ' ZB';
-  }
-
-  $yottabytes = $zettabytes / 1024;
-
-  if ($yottabytes < 1024) {
-    return round($yottabytes, $precision) . ' ZB';
-  }
-
-  $hellabyte = $yottabytes / 1024;
-
-  if ($hellabyte < 1024) {
-    return round($hellabyte, $precision) . ' HB';
-  }
-  
-  return $bytes . ' B';
 }
